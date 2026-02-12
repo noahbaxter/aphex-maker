@@ -6,3 +6,5 @@ build/
 .venv/
 venv/
 out/
+.DS_Store
+images/
