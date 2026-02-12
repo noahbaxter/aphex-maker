@@ -20,6 +20,7 @@ def process_one(input_path: Path, output_path: Path, preview_path: Path | None, 
         top_n=args.top_n,
         quantize=args.quantize,
         invert=args.invert,
+        edges=args.edges,
     )
     print(f"  image size: {image.shape[1]}x{image.shape[0]} (width x height)", file=sys.stderr)
 
@@ -74,6 +75,7 @@ def main():
     parser.add_argument("--noise-knee", type=float, default=cfg.get("noise_knee", 2.0))
     parser.add_argument("--top-n", type=int, default=cfg.get("top_n"))
     parser.add_argument("--quantize", type=int, default=cfg.get("quantize"))
+    parser.add_argument("--edges", type=float, default=cfg.get("edges", 0.0))
     parser.add_argument("--invert", action=argparse.BooleanOptionalAction, default=cfg.get("invert", False))
     parser.add_argument("--height", type=int, default=cfg.get("height"))
     parser.add_argument("--width", type=int, default=cfg.get("width"))

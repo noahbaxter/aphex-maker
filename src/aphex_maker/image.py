@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image, ImageOps
-from scipy.ndimage import gaussian_filter
+from scipy.ndimage import gaussian_filter, sobel
 
 
 def load_image(
@@ -14,6 +14,7 @@ def load_image(
     top_n: int | None = None,
     quantize: int | None = None,
     invert: bool = False,
+    edges: float = 0.0,
 ) -> np.ndarray:
     img = ImageOps.exif_transpose(Image.open(path))
 
@@ -36,6 +37,17 @@ def load_image(
         resized = Image.fromarray((gray * 255).astype(np.uint8))
         resized = resized.resize((w, h), Image.LANCZOS)
         gray = np.array(resized, dtype=np.float64) / 255.0
+
+    if edges > 0:
+        sx = sobel(gray, axis=0)
+        sy = sobel(gray, axis=1)
+        gray = np.hypot(sx, sy)
+        peak = gray.max()
+        if peak > 0:
+            gray /= peak
+        # edges value acts as exponent: >1 keeps only strong edges, <1 boosts weak edges
+        if edges != 1.0:
+            gray = np.power(gray, edges)
 
     if invert:
         # Invert brightness but preserve transparent areas as silent

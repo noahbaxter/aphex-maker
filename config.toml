@@ -1,21 +1,29 @@
 [synth]
+# core
 duration = 6
 sample_rate = 48000
 freq_min = 100
 freq_max = 20000
-log_freq = true
-blur = 0
+
+# image processing
+gamma = 3.0
 noise_floor = -40
 noise_knee = 2.0
-gamma = 3.0
-invert = false
+
+# stereo
+stereo_spread = 0.8
+stereo_seed = 42
+
+# optional
+# log_freq = false
+# random_phase = false
+# invert = true
+# edges = 0.5
+# blur = 1.5
+# detune = 5.0
 # top_n = 256
 # quantize = 8
 height = 256
-random_phase = true
-# detune = 5.0
-stereo_spread = 0.8
-stereo_seed = 42
 # width = 64
 
 [prep]
