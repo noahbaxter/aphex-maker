@@ -22,15 +22,17 @@ def process_one(input_path: Path, output_path: Path, preview_path: Path | None, 
     )
     print(f"  image size: {image.shape[1]}x{image.shape[0]} (width x height)", file=sys.stderr)
 
+    log_freq = not args.linear_freq
     print(f"  synthesizing audio: {args.duration}s @ {args.sample_rate}Hz", file=sys.stderr)
-    print(f"  frequency range: {args.freq_min}-{args.freq_max}Hz ({args.freq_scale})", file=sys.stderr)
+    print(f"  frequency range: {args.freq_min}-{args.freq_max}Hz ({'log' if log_freq else 'linear'})", file=sys.stderr)
     signal = synthesize(
         image,
         duration=args.duration,
         sample_rate=args.sample_rate,
         freq_min=args.freq_min,
         freq_max=args.freq_max,
-        freq_scale=args.freq_scale,
+        log_freq=log_freq,
+        random_phase=args.random_phase,
         stereo_spread=args.stereo_spread,
         stereo_seed=args.stereo_seed,
     )
@@ -46,7 +48,7 @@ def process_one(input_path: Path, output_path: Path, preview_path: Path | None, 
             sample_rate=args.sample_rate,
             freq_min=args.freq_min,
             freq_max=args.freq_max,
-            freq_scale=args.freq_scale,
+            log_freq=log_freq,
         )
 
 
@@ -63,7 +65,7 @@ def main():
     parser.add_argument("--sample-rate", type=int, default=cfg.get("sample_rate", 44100))
     parser.add_argument("--freq-min", type=float, default=cfg.get("freq_min", 20))
     parser.add_argument("--freq-max", type=float, default=cfg.get("freq_max", 20000))
-    parser.add_argument("--freq-scale", choices=["log", "linear"], default=cfg.get("freq_scale", "log"))
+    parser.add_argument("--linear-freq", action="store_true", default=not cfg.get("log_freq", True))
     parser.add_argument("--blur", type=float, default=cfg.get("blur", 0))
     parser.add_argument("--noise-floor", type=float, default=cfg.get("noise_floor", -80))
     parser.add_argument("--gamma", type=float, default=cfg.get("gamma", 1.0))
@@ -72,6 +74,7 @@ def main():
     parser.add_argument("--quantize", type=int, default=cfg.get("quantize"))
     parser.add_argument("--height", type=int, default=cfg.get("height"))
     parser.add_argument("--width", type=int, default=cfg.get("width"))
+    parser.add_argument("--random-phase", action=argparse.BooleanOptionalAction, default=cfg.get("random_phase", True))
     parser.add_argument("--stereo-spread", type=float, default=cfg.get("stereo_spread", 0.0))
     parser.add_argument("--stereo-seed", type=int, default=cfg.get("stereo_seed", 42))
     parser.add_argument("--no-preview", action="store_true")

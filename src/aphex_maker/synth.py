@@ -13,7 +13,8 @@ def synthesize(
     sample_rate: int,
     freq_min: float,
     freq_max: float,
-    freq_scale: str = "log",
+    log_freq: bool = True,
+    random_phase: bool = True,
     stereo_spread: float = 0.0,
     stereo_seed: int = 42,
 ) -> np.ndarray:
@@ -21,7 +22,7 @@ def synthesize(
     num_samples = int(duration * sample_rate)
     t = np.arange(num_samples, dtype=np.float64) / sample_rate
 
-    if freq_scale == "log":
+    if log_freq:
         freqs = np.logspace(
             np.log10(freq_min), np.log10(freq_max), num_bins
         )
@@ -52,7 +53,7 @@ def synthesize(
         envelope = interp(t)
         envelope = np.clip(envelope, 0, 1)
 
-        phase = rng.uniform(0, 2 * np.pi)
+        phase = rng.uniform(0, 2 * np.pi) if random_phase else 0.0
         tone = envelope * np.sin(2 * np.pi * freqs[i] * t + phase)
 
         if stereo:
@@ -109,7 +110,7 @@ def save_spectrogram(
     sample_rate: int,
     freq_min: float,
     freq_max: float,
-    freq_scale: str = "log",
+    log_freq: bool = True,
 ) -> None:
     # Mix to mono for spectrogram if stereo
     if signal.ndim == 2:
@@ -133,7 +134,7 @@ def save_spectrogram(
         vmax=0,
     )
 
-    if freq_scale == "log":
+    if log_freq:
         ax.set_yscale("log")
 
     ax.set_ylim(freq_min, freq_max)
