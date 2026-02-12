@@ -1,0 +1,21 @@
+[synth]
+duration = 6
+sample_rate = 48000
+freq_min = 100
+freq_max = 20000
+freq_scale = "log"
+blur = 0
+noise_floor = -40
+noise_knee = 2.0
+gamma = 3.0
+# top_n = 256
+# quantize = 8
+height = 256
+stereo_spread = 0.8
+stereo_seed = 42
+# width = 64
+
+[prep]
+padding = 0
+crop = true
+expand = 1
