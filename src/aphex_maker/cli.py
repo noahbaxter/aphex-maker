@@ -34,6 +34,7 @@ def process_one(input_path: Path, output_path: Path, preview_path: Path | None, 
         freq_max=args.freq_max,
         log_freq=log_freq,
         random_phase=args.random_phase,
+        detune=args.detune,
         stereo_spread=args.stereo_spread,
         stereo_seed=args.stereo_seed,
     )
@@ -76,6 +77,7 @@ def main():
     parser.add_argument("--invert", action=argparse.BooleanOptionalAction, default=cfg.get("invert", False))
     parser.add_argument("--height", type=int, default=cfg.get("height"))
     parser.add_argument("--width", type=int, default=cfg.get("width"))
+    parser.add_argument("--detune", type=float, default=cfg.get("detune", 0.0))
     parser.add_argument("--random-phase", action=argparse.BooleanOptionalAction, default=cfg.get("random_phase", True))
     parser.add_argument("--stereo-spread", type=float, default=cfg.get("stereo_spread", 0.0))
     parser.add_argument("--stereo-seed", type=int, default=cfg.get("stereo_seed", 42))

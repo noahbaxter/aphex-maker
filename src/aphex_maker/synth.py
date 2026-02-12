@@ -15,6 +15,7 @@ def synthesize(
     freq_max: float,
     log_freq: bool = True,
     random_phase: bool = True,
+    detune: float = 0.0,
     stereo_spread: float = 0.0,
     stereo_seed: int = 42,
 ) -> np.ndarray:
@@ -28,6 +29,12 @@ def synthesize(
         )
     else:
         freqs = np.linspace(freq_min, freq_max, num_bins)
+
+    # Detune — randomly shift each bin's frequency by up to ±detune%
+    if detune > 0:
+        detune_rng = np.random.default_rng(stereo_seed + 1)
+        offsets = detune_rng.uniform(-detune / 100, detune / 100, num_bins)
+        freqs *= (1 + offsets)
 
     col_times = np.linspace(0, duration, num_cols)
 
