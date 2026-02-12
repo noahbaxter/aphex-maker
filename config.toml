@@ -8,6 +8,7 @@ blur = 0
 noise_floor = -40
 noise_knee = 2.0
 gamma = 3.0
+invert = false
 # top_n = 256
 # quantize = 8
 height = 256

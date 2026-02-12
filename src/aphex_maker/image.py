@@ -13,6 +13,7 @@ def load_image(
     noise_knee: float = 2.0,
     top_n: int | None = None,
     quantize: int | None = None,
+    invert: bool = False,
 ) -> np.ndarray:
     img = ImageOps.exif_transpose(Image.open(path))
 
@@ -35,6 +36,14 @@ def load_image(
         resized = Image.fromarray((gray * 255).astype(np.uint8))
         resized = resized.resize((w, h), Image.LANCZOS)
         gray = np.array(resized, dtype=np.float64) / 255.0
+
+    if invert:
+        # Invert brightness but preserve transparent areas as silent
+        if alpha is not None:
+            nonzero = gray > 0
+            gray[nonzero] = 1.0 - gray[nonzero]
+        else:
+            gray = 1.0 - gray
 
     if blur > 0:
         gray = gaussian_filter(gray, sigma=blur)
