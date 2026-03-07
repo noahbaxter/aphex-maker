@@ -20,3 +20,6 @@ aphex-prep = "aphex_maker.prep:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"aphex_maker.presets" = ["*.toml"]

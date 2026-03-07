@@ -56,11 +56,17 @@ def process_one(input_path: Path, output_path: Path, preview_path: Path | None, 
 
 
 def main():
-    cfg = get_synth_config()
+    # Pre-parse --config so it can influence argument defaults
+    pre = argparse.ArgumentParser(add_help=False)
+    pre.add_argument("--config", default=None, help="Config TOML file path or preset name (e.g. 'legible')")
+    pre_args, _ = pre.parse_known_args()
+
+    cfg = get_synth_config(pre_args.config)
 
     parser = argparse.ArgumentParser(
         prog="aphex-maker",
         description="Embed an image into audio so it's visible in a spectrogram.",
+        parents=[pre],
     )
     parser.add_argument("inputs", nargs="+", help="Input image(s) (PNG, JPEG, etc.)")
     parser.add_argument("-o", "--output", help="Output WAV path (only valid with single input)")

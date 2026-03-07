@@ -1,0 +1,16 @@
+[synth]
+duration = 1.8
+sample_rate = 48000
+freq_min = 5000
+freq_max = 18000
+gamma = 1.5
+noise_floor = -60
+noise_knee = 3.0
+log_freq = false
+height = 512
+blur = 0.0
+
+[prep]
+padding = 0
+crop = true
+expand = 1
